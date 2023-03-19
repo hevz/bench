@@ -15,6 +15,7 @@ extern void* ls_memcpy(void *dest, const void *src, size_t n);
 extern void* kmemcpy(void *dest, const void *src, size_t n);
 extern void* rte_memcpy(void *dest, const void *src, size_t n);
 void *memcpy(void *dest, const void *src, size_t n);
+extern void* hmemcpy(void *dest, const void *src, size_t n);
 
 
 typedef void* (*memcpyFunc)(void*, const void *, size_t);
@@ -45,6 +46,8 @@ char *getFuncName(int type) {
 	} else if (type == 3) {
 		return "kernel memcpy";
 	} else if (type == 4) {
+		return "hmemcpy";
+	} else if (type == 5) {
 		return "memcpy";
 	} else
 		return "memcpy";
@@ -111,8 +114,11 @@ void benchFunc(struct membench_env *pEnv) {
         pEnv->func = kmemcpy;
         pEnv->funcType = 3;
         bench(pEnv);
-        pEnv->func = memcpy;
+        pEnv->func = hmemcpy;
         pEnv->funcType = 4;
+        bench(pEnv);
+        pEnv->func = memcpy;
+        pEnv->funcType = 5;
         bench(pEnv);
         printf("\n");
 
